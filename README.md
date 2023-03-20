@@ -9,7 +9,7 @@ And that's it outside of this exectuable itself.
 # Build Instructions
 1. [Download the the latest release](https://github.com/RadzPrower/Super-Metroid-Launcher/releases/latest)
 2. Unzip the file.
-3. Run `Super Metroid Launcher.exe` at which point you will be greated by a window that looks like this:
+3. Run `Super Metroid Launcher.exe` at which point you will be greeted by a window that looks like this:
 
 ![image](https://user-images.githubusercontent.com/37708128/226466146-fde7bb92-b4a9-43fe-a1dd-4b38ab685c31.png)
 
