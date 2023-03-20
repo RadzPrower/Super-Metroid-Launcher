@@ -1,7 +1,9 @@
 # Super Metroid Launcher
 This launcher is intended to be a near 1-click tool for downloading, extracting, and compiling steps required to play the Super Metroid reimplementation (created by snesrev) on Windows.
 # Prerequisites
-1. A legitimately obtained copy of the Super Metroid US ROM. `SHA256 12B77C4BC9C1832CEE8881244659065EE1D84C70C3D29E6EAF92E6798CC2CA72`
+1. A legitimately obtained copy of the Super Metroid (US) ROM.
+
+SHA256: `12B77C4BC9C1832CEE8881244659065EE1D84C70C3D29E6EAF92E6798CC2CA72`
 
 And that's it outside of this exectuable itself.
 # Build Instructions
@@ -9,12 +11,12 @@ And that's it outside of this exectuable itself.
 2. Unzip the file.
 3. Run `Super Metroid Launcher.exe` at which point you will be greated by a window that looks like this:
 
-![image](https://user-images.githubusercontent.com/37708128/216780011-98f4ff41-01a6-4b95-9621-f1eef447df77.png)
+![image](https://user-images.githubusercontent.com/37708128/226466146-fde7bb92-b4a9-43fe-a1dd-4b38ab685c31.png)
 
 4. Click the download button. If you happen to have a `sm.sfc` file in the same directory as the executable, it will copy it over automatically for you, but if not, a file selection dialog will open and allow you to select your ROM file (naming is not important).
 5. The button will change from `Download` to indicate `Downloading...` This will quickly pop up a number of windows indicating download progress. Once the files are downloaded, the button will change to indicate `Building...` at which point it may take up to several minutes to complete the process depending on your system. You will know the process is complete when the window looks like this:
 
-![image](https://user-images.githubusercontent.com/37708128/218764570-c36e7ffd-f604-4de0-8116-6e1f18174b57.png)
+![image](https://user-images.githubusercontent.com/37708128/226466278-a904a590-3a4d-4395-82a2-a78c9568739f.png)
 
 6. Click `Launch Super Metroid` and enjoy your time revisiting this classic natively on modern hardware.
 
@@ -23,7 +25,7 @@ The top button at this point should say `Restore` which will completely re-do th
 NOTE: There have been no updates since this functionality was programmed, so there is a chance it will not work. If you notice that it is not working, please let me know.
 
 # Settings Menu
-![image](https://user-images.githubusercontent.com/37708128/223177369-dbfd8e1c-3c18-4764-8051-316c96cd493a.png)
+![image](https://user-images.githubusercontent.com/37708128/226466334-9eba7154-19dd-4261-9101-ba78fdee41ee.png)
 
 There are a number of settings available for you to change here. I will briefly explain them here.
 
@@ -54,7 +56,7 @@ There are a number of settings available for you to change here. I will briefly 
 - Audio Samples: Defaults to 512, but the larger the number the less cracking, but the longer lag between the audio and visuals.
 
 # Keymapper Utility
-![image](https://user-images.githubusercontent.com/37708128/223178075-c2030a81-55d4-45c6-a2e6-842267aa2789.png)
+![image](https://user-images.githubusercontent.com/37708128/226466429-8ded6770-73af-4f8c-b042-bab8d6706cbe.png)
 
 This utility allows you to set all the available standard controls (SNES controller) and additional hotkeys for `sm` exclusive functionality. The keyboard and gamepad settings are stored simultaneously for the main controls in the INI, so you must select which version you want to set for those controls specifically. The hotkeys however are unique so they can be freely set to either a gamepad or keyboard input.
 
