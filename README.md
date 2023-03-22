@@ -79,3 +79,6 @@ You can hit the `Assign All Input` button to be sequentially moved from input to
 ### Replays
 - Toggle Replay Speed: Toggles replay speed between realtime and turbo.
 - Stop Repaly: Stops the current replay and you assume control of the game.
+
+# Other Tools
+[Zelda 3 Launcher](https://github.com/RadzPrower/Zelda-3-Launcher/releases/latest)
