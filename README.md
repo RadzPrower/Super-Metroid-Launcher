@@ -1,5 +1,5 @@
 # Super Metroid Launcher
-This launcher is intended to be a near 1-click tool for downloading, extracting, and compiling steps required to play the Super Metroid reimplementation (created by snesrev) on Windows.
+This launcher is intended to be a near 1-click tool for downloading, extracting, and compiling steps required to play the Super Metroid reimplementation (created by [snesrev](https://github.com/snesrev/sm)) on Windows.
 # Prerequisites
 1. A legitimately obtained copy of the Super Metroid (US) ROM.
 
