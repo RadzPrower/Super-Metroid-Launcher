@@ -1,3 +1,4 @@
+[![Listed on PlayPorted](https://playported.com/badge.svg)](https://playported.com/ports/6-super-metroid/)
 # Super Metroid Launcher
 This launcher is intended to be a near 1-click tool for downloading, extracting, and compiling steps required to play the Super Metroid reimplementation (created by [snesrev](https://github.com/snesrev/sm)) on Windows.
 # Prerequisites
