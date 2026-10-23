@@ -241,7 +241,7 @@
             this.buttonAssignAll.Text = "Assign All Input";
             this.toolTip1.SetToolTip(this.buttonAssignAll, "Set each input sequentially (hit ESC to skip to the next input)");
             this.buttonAssignAll.UseVisualStyleBackColor = true;
-            this.buttonAssignAll.Click += new System.EventHandler(this.buttonAssignAll_Click);
+            this.buttonAssignAll.Click += new System.EventHandler(this.ButtonAssignAll_Click);
             // 
             // groupBoxInput
             // 
@@ -534,7 +534,7 @@
             this.buttonSave.Text = "Save";
             this.toolTip1.SetToolTip(this.buttonSave, "Save all controller settings and close menu");
             this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // buttonReset
             // 
@@ -545,7 +545,7 @@
             this.buttonReset.Text = "Reset";
             this.toolTip1.SetToolTip(this.buttonReset, "Reset all controller related settings");
             this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            this.buttonReset.Click += new System.EventHandler(this.ButtonReset_Click);
             // 
             // buttonCancel
             // 
@@ -556,7 +556,7 @@
             this.buttonCancel.Text = "Cancel";
             this.toolTip1.SetToolTip(this.buttonCancel, "Close keymapping utility without saving any changes");
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
             // textBoxToggleReplay
             // 

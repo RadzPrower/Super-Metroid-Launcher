@@ -325,7 +325,7 @@
             this.windowAuto.Text = "Auto";
             this.toolTip1.SetToolTip(this.windowAuto, "Automatically resize window to match selected aspect ratio");
             this.windowAuto.UseVisualStyleBackColor = true;
-            this.windowAuto.CheckedChanged += new System.EventHandler(this.customSizeChange);
+            this.windowAuto.CheckedChanged += new System.EventHandler(this.CustomSizeChange);
             // 
             // checkPPU
             // 
@@ -428,7 +428,7 @@
             this.buttonOpenShader.Text = "...";
             this.toolTip1.SetToolTip(this.buttonOpenShader, "Opens a dialog for selecting your GLSL shader file.");
             this.buttonOpenShader.UseVisualStyleBackColor = true;
-            this.buttonOpenShader.Click += new System.EventHandler(this.buttonOpenShader_Click);
+            this.buttonOpenShader.Click += new System.EventHandler(this.ButtonOpenShader_Click);
             // 
             // textBoxGLSLShader
             // 
@@ -450,7 +450,7 @@
             this.toolTip1.SetToolTip(this.buttonOpenSprites, "Opens a dialog for selecting your ZSPR custom sprite file.");
             this.buttonOpenSprites.UseVisualStyleBackColor = true;
             this.buttonOpenSprites.Visible = false;
-            this.buttonOpenSprites.Click += new System.EventHandler(this.buttonOpenSprites_Click);
+            this.buttonOpenSprites.Click += new System.EventHandler(this.ButtonOpenSprites_Click);
             // 
             // textBoxCustomLink
             // 
@@ -472,7 +472,7 @@
             this.toolTip1.SetToolTip(this.checkBoxCustomLinkSprites, "Enables custom ZSPR Link sprites");
             this.checkBoxCustomLinkSprites.UseVisualStyleBackColor = true;
             this.checkBoxCustomLinkSprites.Visible = false;
-            this.checkBoxCustomLinkSprites.CheckedChanged += new System.EventHandler(this.checkBoxCustomLinkSprites_CheckedChanged);
+            this.checkBoxCustomLinkSprites.CheckedChanged += new System.EventHandler(this.CheckBoxCustomLinkSprites_CheckedChanged);
             // 
             // checkBoxShader
             // 
@@ -485,7 +485,7 @@
             this.toolTip1.SetToolTip(this.checkBoxShader, "This will enable the use of GLSL shaders.\r\n\r\nThis is only supported by the OpenGL" +
         " renderer.");
             this.checkBoxShader.UseVisualStyleBackColor = true;
-            this.checkBoxShader.CheckedChanged += new System.EventHandler(this.checkBoxShader_CheckedChanged);
+            this.checkBoxShader.CheckedChanged += new System.EventHandler(this.CheckBoxShader_CheckedChanged);
             // 
             // checkBoxEnableAudio
             // 
@@ -499,7 +499,7 @@
             this.checkBoxEnableAudio.Text = "Enable Audio";
             this.toolTip1.SetToolTip(this.checkBoxEnableAudio, "Enable audio output by the game");
             this.checkBoxEnableAudio.UseVisualStyleBackColor = true;
-            this.checkBoxEnableAudio.CheckedChanged += new System.EventHandler(this.checkBoxEnableAudio_CheckedChanged);
+            this.checkBoxEnableAudio.CheckedChanged += new System.EventHandler(this.CheckBoxEnableAudio_CheckedChanged);
             // 
             // labelAudioFrequency
             // 
@@ -628,7 +628,7 @@
             this.buttonMSUDirectory.Text = "...";
             this.toolTip1.SetToolTip(this.buttonMSUDirectory, "Open dialog to select MSU directory");
             this.buttonMSUDirectory.UseVisualStyleBackColor = true;
-            this.buttonMSUDirectory.Click += new System.EventHandler(this.buttonMSUDirectory_Click);
+            this.buttonMSUDirectory.Click += new System.EventHandler(this.ButtonMSUDirectory_Click);
             // 
             // comboBoxSamples
             // 
@@ -672,7 +672,7 @@
             this.toolTip1.SetToolTip(this.checkBoxEnableMSU, resources.GetString("checkBoxEnableMSU.ToolTip"));
             this.checkBoxEnableMSU.UseVisualStyleBackColor = true;
             this.checkBoxEnableMSU.Visible = false;
-            this.checkBoxEnableMSU.CheckedChanged += new System.EventHandler(this.checkBoxEnableMSU_CheckedChanged);
+            this.checkBoxEnableMSU.CheckedChanged += new System.EventHandler(this.CheckBoxEnableMSU_CheckedChanged);
             // 
             // radioButtonStereo
             // 
@@ -708,7 +708,7 @@
             this.buttonReset.Text = "Reset";
             this.toolTip1.SetToolTip(this.buttonReset, "Reset all settings to their default values");
             this.buttonReset.UseVisualStyleBackColor = true;
-            this.buttonReset.Click += new System.EventHandler(this.buttonReset_Click);
+            this.buttonReset.Click += new System.EventHandler(this.ButtonReset_Click);
             // 
             // buttonSave
             // 
@@ -719,7 +719,7 @@
             this.buttonSave.Text = "Save";
             this.toolTip1.SetToolTip(this.buttonSave, "Save current settings and close window");
             this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.buttonSave.Click += new System.EventHandler(this.ButtonSave_Click);
             // 
             // buttonCancel
             // 
@@ -730,7 +730,7 @@
             this.buttonCancel.Text = "Cancel";
             this.toolTip1.SetToolTip(this.buttonCancel, "Close window without saving any settings");
             this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            this.buttonCancel.Click += new System.EventHandler(this.ButtonCancel_Click);
             // 
             // labelRenderMethod
             // 
@@ -769,7 +769,7 @@
             this.linkLabelCustomSprites.Text = "Custom Sprite Downloads";
             this.toolTip1.SetToolTip(this.linkLabelCustomSprites, "Click here for some custom sprites you can download");
             this.linkLabelCustomSprites.Visible = false;
-            this.linkLabelCustomSprites.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelCustomSprites_LinkClicked);
+            this.linkLabelCustomSprites.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelCustomSprites_LinkClicked);
             // 
             // buttonKeymapping
             // 
@@ -780,7 +780,7 @@
             this.buttonKeymapping.Text = "Keymapping";
             this.toolTip1.SetToolTip(this.buttonKeymapping, "Open a new settings menu exclusively for configuring keymappings for the game");
             this.buttonKeymapping.UseVisualStyleBackColor = true;
-            this.buttonKeymapping.Click += new System.EventHandler(this.buttonKeymapping_Click);
+            this.buttonKeymapping.Click += new System.EventHandler(this.ButtonKeymapping_Click);
             // 
             // graphics
             // 
@@ -815,7 +815,7 @@
             this.linkLabelGLSLShaders.TabIndex = 14;
             this.linkLabelGLSLShaders.TabStop = true;
             this.linkLabelGLSLShaders.Text = "Suggested Shaders";
-            this.linkLabelGLSLShaders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGLSLShaders_LinkClicked);
+            this.linkLabelGLSLShaders.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabelGLSLShaders_LinkClicked);
             // 
             // fullscreenMode
             // 

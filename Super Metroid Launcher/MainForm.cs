@@ -1,5 +1,5 @@
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Formats.Tar;
 using LibGit2Sharp;
 
 namespace Super_Metroid_Launcher
@@ -16,7 +16,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void launch_click(object sender, EventArgs e)
+        private void Launch_click(object sender, EventArgs e)
         {
             this.launch.Text = "Launching...";
             this.Enabled = false;
@@ -26,7 +26,7 @@ namespace Super_Metroid_Launcher
 
             this.launch.Text = "Running...";
             this.WindowState = FormWindowState.Minimized;
-            if (runProcess(@".\sm\sm.exe", ""))
+            if (RunProcess(@".\sm\sm.exe", ""))
             {
                 MessageBox.Show("Error occurred while launching Super Metroid.\n\nPlease refer to " + Path.Combine(Program.currentDirectory, "sm.log") + " for further details.");
             }
@@ -40,7 +40,7 @@ namespace Super_Metroid_Launcher
             this.WindowState = FormWindowState.Normal;
         }
 
-        private void build_Click(object sender, EventArgs e)
+        private void Build_Click(object sender, EventArgs e)
         {
             this.build.Text = "Downloading...";
             this.build.Enabled = false;
@@ -48,7 +48,7 @@ namespace Super_Metroid_Launcher
             this.launch.Enabled = false;
             this.settings.Enabled = false;
 
-            using (progressForm cloneRepo = new progressForm("Repository Download", "Downloading a fresh copy of the sm repository..."))
+            using (progressForm cloneRepo = new("Repository Download", "Downloading a fresh copy of the sm repository..."))
             {
                 if (cloneRepo.ShowDialog() == DialogResult.OK)
                 {
@@ -62,7 +62,7 @@ namespace Super_Metroid_Launcher
                 return;
             }
 
-            using (progressForm copyROM = new progressForm("Copying ROM File", "Copying ROM file to proper directory..."))
+            using (progressForm copyROM = new("Copying ROM File", "Copying ROM file to proper directory..."))
             {
                 if (copyROM.ShowDialog() == DialogResult.OK)
                 {
@@ -77,7 +77,7 @@ namespace Super_Metroid_Launcher
                 return;
             }
 
-            using (progressForm downloadTCC = new progressForm("Downloading TCC", "Downloading TCC build tools..."))
+            using (progressForm downloadTCC = new("Downloading TCC", "Downloading TCC build tools..."))
             {
                 if (downloadTCC.ShowDialog() == DialogResult.OK)
                 {
@@ -85,7 +85,7 @@ namespace Super_Metroid_Launcher
                 }
             }
 
-            using (progressForm downloadSDL2 = new progressForm("Downloading SDL2", "Downloading SDL2..."))
+            using (progressForm downloadSDL2 = new("Downloading SDL2", "Downloading SDL2..."))
             {
                 if (downloadSDL2.ShowDialog() == DialogResult.OK)
                 {
@@ -115,7 +115,7 @@ namespace Super_Metroid_Launcher
 
             // build sm.exe
             labelCompileStatus.Text = "Building sm.exe...";
-            if (runProcess("cmd.exe", @"/C radzprower.bat"))
+            if (RunProcess("cmd.exe", @"/C radzprower.bat"))
             {
                 MessageBox.Show("Error occurred while building executable.\n\nPlease refer to " + Path.Combine(Program.currentDirectory, "sm.log") + " for further details.");
                 return;
@@ -147,16 +147,14 @@ namespace Super_Metroid_Launcher
 
         public static void CopyFromBackupINI(string iniFile, string iniCopy)
         {
-            using (var modifiedFile = File.AppendText(iniFile))
+            using var modifiedFile = File.AppendText(iniFile);
+            foreach (var line in File.ReadLines(iniCopy))
             {
-                foreach (var line in File.ReadLines(iniCopy))
+                if (line.Equals("#Shader = glsl-shaders/hqx/hq4x.glslp"))
                 {
-                    if (line.Equals("#Shader = glsl-shaders/hqx/hq4x.glslp"))
-                    {
-                        modifiedFile.WriteLine("Shader =");
-                    }
-                    else modifiedFile.WriteLine(line);
+                    modifiedFile.WriteLine("Shader =");
                 }
+                else modifiedFile.WriteLine(line);
             }
         }
 
@@ -165,7 +163,7 @@ namespace Super_Metroid_Launcher
             this.build.Text = "Download";
             if (Directory.Exists(Program.repoDir))
             {
-                Repository repo = new Repository(Program.repoDir);
+                Repository repo = new(Program.repoDir);
 
                 var status = repo.RetrieveStatus();
 
@@ -191,9 +189,9 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void settings_click(object sender, EventArgs e)
+        private void Settings_click(object sender, EventArgs e)
         {
-            using (settingsForm settings = new settingsForm())
+            using (settingsForm settings = new())
             {
                 if (!settings.IsDisposed && settings.ShowDialog() == DialogResult.OK)
                 {
@@ -206,7 +204,7 @@ namespace Super_Metroid_Launcher
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            ComponentResourceManager resources = new(typeof(MainForm));
             this.build = new System.Windows.Forms.Button();
             this.launch = new System.Windows.Forms.Button();
             this.settings = new System.Windows.Forms.Button();
@@ -223,7 +221,7 @@ namespace Super_Metroid_Launcher
             this.build.TabIndex = 1;
             this.build.Text = "Download";
             this.build.UseVisualStyleBackColor = true;
-            this.build.Click += new System.EventHandler(this.build_Click);
+            this.build.Click += new System.EventHandler(this.Build_Click);
             // 
             // launch
             // 
@@ -235,7 +233,7 @@ namespace Super_Metroid_Launcher
             this.launch.TabIndex = 0;
             this.launch.Text = "Launch Super Metroid";
             this.launch.UseVisualStyleBackColor = true;
-            this.launch.Click += new System.EventHandler(this.launch_click);
+            this.launch.Click += new System.EventHandler(this.Launch_click);
             // 
             // settings
             // 
@@ -247,7 +245,7 @@ namespace Super_Metroid_Launcher
             this.settings.TabIndex = 2;
             this.settings.Text = "Settings";
             this.settings.UseVisualStyleBackColor = true;
-            this.settings.Click += new System.EventHandler(this.settings_click);
+            this.settings.Click += new System.EventHandler(this.Settings_click);
             // 
             // labelCompileStatus
             // 
@@ -289,7 +287,7 @@ namespace Super_Metroid_Launcher
 
         }
 
-        public Boolean runProcess(string filename, string arguments)
+        public Boolean RunProcess(string filename, string arguments)
         {
             var logFile = Program.currentDirectory + "\\sm.log";
             var fileInfo = new FileInfo(logFile);
@@ -304,17 +302,21 @@ namespace Super_Metroid_Launcher
 
             File.AppendAllText(logFile, "Executing via " + filename + ":\n " + arguments + "\n");
 
-            ProcessStartInfo sInfo = new ProcessStartInfo();
-            sInfo.FileName = filename;
-            sInfo.Arguments = arguments;
-            sInfo.WorkingDirectory = Program.repoDir;
-            sInfo.RedirectStandardOutput = true;
-            sInfo.RedirectStandardError = true;
-            sInfo.UseShellExecute = false;
-            sInfo.CreateNoWindow = true;
+            ProcessStartInfo sInfo = new()
+            {
+                FileName = filename,
+                Arguments = arguments,
+                WorkingDirectory = Program.repoDir,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
-            Process process = new Process();
-            process.StartInfo = sInfo;
+            Process process = new()
+            {
+                StartInfo = sInfo
+            };
             processes.Add(process);
 
             while (!IsHandleCreated)
@@ -343,7 +345,7 @@ namespace Super_Metroid_Launcher
             process.BeginErrorReadLine();
             while (!process.HasExited)
             {
-                var fileCount = Directory.GetFiles(Program.repoDir, "*", SearchOption.AllDirectories).Count();
+                var fileCount = Directory.GetFiles(Program.repoDir, "*", SearchOption.AllDirectories).Length;
                 if (fileCount > 2900) progressCompile.Value = fileCount - 1000;
                 else progressCompile.Value = fileCount;
                 Application.DoEvents();
@@ -363,6 +365,6 @@ namespace Super_Metroid_Launcher
             return false;
         }
 
-        List<Process> processes = new List<Process>();
+        private readonly List<Process> processes = [];
     }
 }

@@ -11,7 +11,7 @@ namespace Super_Metroid_Launcher
 {
     public partial class settingsForm : Form
     {
-        private string v;
+        private readonly string v;
 
         private static volatile int progress = 0;
 
@@ -33,7 +33,7 @@ namespace Super_Metroid_Launcher
                     return;
                 }
 
-                buttonReset_Click(this, new EventArgs());
+                ButtonReset_Click(this, new EventArgs());
             }
 
             if (checkBoxEnableMSU.Checked == false) groupBoxMSUSettings.Enabled = false;
@@ -56,7 +56,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void buttonReset_Click(object sender, EventArgs e)
+        private void ButtonReset_Click(object sender, EventArgs e)
         {
             this.buttonReset.Text = "Resetting...";
 
@@ -70,8 +70,8 @@ namespace Super_Metroid_Launcher
                 this.buttonReset.Text = "Reset";
                 return;
             }
-            
-            restoreINI();
+
+            RestoreINI();
             try
             {
                 ImportINI();
@@ -88,7 +88,7 @@ namespace Super_Metroid_Launcher
 
                 File.Delete(Path.Combine(Program.repoDir, "backup", "sm.ini"));
 
-                restoreINI();
+                RestoreINI();
                 ImportINI();
             }
 
@@ -97,7 +97,7 @@ namespace Super_Metroid_Launcher
             this.buttonReset.Text = "Reset";
         }
 
-        private void restoreINI()
+        private static void RestoreINI()
         {
             var iniFile = Path.Combine(Program.repoDir, "sm.ini");
             var iniBackup = Path.Combine(Program.repoDir, "backup", "sm.ini");
@@ -106,23 +106,21 @@ namespace Super_Metroid_Launcher
 
             if (!File.Exists(iniBackup)) DownloadFreshINI();
 
-            using (var modifiedFile = File.AppendText(iniFile))
+            using var modifiedFile = File.AppendText(iniFile);
+            foreach (var line in File.ReadLines(iniBackup))
             {
-                foreach (var line in File.ReadLines(iniBackup))
+                if (line.Equals("#Shader = glsl-shaders/hqx/hq4x.glslp"))
                 {
-                    if (line.Equals("#Shader = glsl-shaders/hqx/hq4x.glslp"))
-                    {
-                        modifiedFile.WriteLine("Shader =");
-                    }
-                    else modifiedFile.WriteLine(line);
+                    modifiedFile.WriteLine("Shader =");
                 }
+                else modifiedFile.WriteLine(line);
             }
         }
 
         internal static void DownloadFreshINI()
         {
             var filename = "sm.ini";
-            Uri uri = new Uri("https://raw.githubusercontent.com/snesrev/sm/master/sm.ini");
+            Uri uri = new("https://raw.githubusercontent.com/snesrev/sm/master/sm.ini");
 
             var directory = Path.Combine(Program.repoDir, "backup");
             var destination = Path.Combine(Program.repoDir, "backup", filename);
@@ -136,15 +134,13 @@ namespace Super_Metroid_Launcher
 
             Task.Run(() =>
             {
-                using (var client = new WebClient())
+                using var client = new WebClient();
+                if (!Directory.Exists(directory))
                 {
-                    if (!Directory.Exists(directory))
-                    {
-                        Directory.CreateDirectory(directory);
-                    }
-                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(downloadProgress);
-                    client.DownloadFileAsync(uri, destination);
+                    Directory.CreateDirectory(directory);
                 }
+                client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(DownloadProgress);
+                client.DownloadFileAsync(uri, destination);
             });
 
             while (!File.Exists(destination))
@@ -157,12 +153,12 @@ namespace Super_Metroid_Launcher
             } while (progress < 100);
         }
 
-        private static void downloadProgress(object sender, DownloadProgressChangedEventArgs e)
+        private static void DownloadProgress(object sender, DownloadProgressChangedEventArgs e)
         {
             progress = e.ProgressPercentage;
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
             buttonSave.Text = "Saving...";
 
@@ -180,7 +176,7 @@ namespace Super_Metroid_Launcher
             this.Close();
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             var answer = MessageBox.Show("The changes that you have made will not be saved.\n\nDo you wish to continue?", "Confirmation", MessageBoxButtons.YesNo);
 
@@ -189,18 +185,18 @@ namespace Super_Metroid_Launcher
             this.Close();
         }
 
-        private void customSizeChange(object sender, EventArgs e)
+        private void CustomSizeChange(object sender, EventArgs e)
         {
             ToggleCustomSizeTextFields();
         }
 
-        private void checkBoxCustomLinkSprites_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxCustomLinkSprites_CheckedChanged(object sender, EventArgs e)
         {
             textBoxCustomLink.Enabled = checkBoxCustomLinkSprites.Checked;
             buttonOpenSprites.Enabled = checkBoxCustomLinkSprites.Checked;
         }
 
-        private void checkBoxShader_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxShader_CheckedChanged(object sender, EventArgs e)
         {
             textBoxGLSLShader.Enabled = checkBoxShader.Checked;
             buttonOpenShader.Enabled = checkBoxShader.Checked;
@@ -216,12 +212,12 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void checkBoxEnableAudio_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxEnableAudio_CheckedChanged(object sender, EventArgs e)
         {
             groupBoxSound.Enabled = checkBoxEnableAudio.Checked;
         }
 
-        private void checkBoxEnableMSU_CheckedChanged(object sender, EventArgs e)
+        private void CheckBoxEnableMSU_CheckedChanged(object sender, EventArgs e)
         {
             groupBoxMSUSettings.Enabled = checkBoxEnableMSU.Checked;
         }
@@ -242,8 +238,10 @@ namespace Super_Metroid_Launcher
             var iniText = File.ReadAllText(iniFile);
 
             // INI parsing
-            var config = new IniParserConfiguration();
-            config.CommentString = "#";
+            var config = new IniParserConfiguration
+            {
+                CommentString = "#"
+            };
 
             var parser = new IniDataParser(config);
 
@@ -369,25 +367,14 @@ namespace Super_Metroid_Launcher
             if (settings["Sound"]["AudioChannels"].Equals("1")) radioButtonMono.Checked = true;
             else radioButtonStereo.Checked = true;
 
-            switch (settings["Sound"]["AudioFreq"])
+            comboBoxFrequency.SelectedIndex = settings["Sound"]["AudioFreq"] switch
             {
-                case "48000":
-                    comboBoxFrequency.SelectedIndex = 0;
-                    break;
-                case "32000":
-                    comboBoxFrequency.SelectedIndex = 2;
-                    break;
-                case "22050":
-                    comboBoxFrequency.SelectedIndex = 3;
-                    break;
-                case "11025":
-                    comboBoxFrequency.SelectedIndex = 4;
-                    break;
-                default:
-                    comboBoxFrequency.SelectedIndex = 1;
-                    break;
-            }
-
+                "48000" => 0,
+                "32000" => 2,
+                "22050" => 3,
+                "11025" => 4,
+                _ => 1,
+            };
             switch (settings["Sound"]["AudioSamples"])
             {
                 case "512":
@@ -446,8 +433,10 @@ namespace Super_Metroid_Launcher
             var iniFile = Path.Combine(Program.repoDir, "sm.ini");
             var iniText = File.ReadAllText(iniFile);
 
-            var config = new IniParserConfiguration();
-            config.CommentString = "#";
+            var config = new IniParserConfiguration
+            {
+                CommentString = "#"
+            };
 
             var parser = new IniDataParser(config);
 
@@ -464,19 +453,12 @@ namespace Super_Metroid_Launcher
             // Reading aspect ratio setting
             var selection = aspectRatio.Controls.OfType<RadioButton>()
                 .FirstOrDefault(n => n.Checked).Text;
-            switch (selection)
+            settings["General"]["ExtendedAspectRatio"] = selection switch
             {
-                case "Steam Deck (16:10)":
-                    settings["General"]["ExtendedAspectRatio"] = "16:10";
-                    break;
-                case "Widescreen (16:9)":
-                    settings["General"]["ExtendedAspectRatio"] = "16:9";
-                    break;
-                default:
-                    settings["General"]["ExtendedAspectRatio"] = "4:3";
-                    break;
-            }
-
+                "Steam Deck (16:10)" => "16:10",
+                "Widescreen (16:9)" => "16:9",
+                _ => "4:3",
+            };
             if (unchangedSprites.Checked) settings["General"]["ExtendedAspectRatio"] += ", unchanged_sprites";
             if (noVisualFixes.Checked) settings["General"]["ExtendedAspectRatio"] += ", no_visual_fixes";
             if (checkBoxExtend.Checked) settings["General"]["ExtendedAspectRatio"] += ", extend_y";
@@ -488,32 +470,21 @@ namespace Super_Metroid_Launcher
             // Reading custom window size or set to auto
             selection = windowSize.Controls.OfType<RadioButton>()
                 .FirstOrDefault(n => n.Checked).Text;
-            switch (selection)
+            settings["Graphics"]["WindowSize"] = selection switch
             {
-                case "Custom":
-                    settings["Graphics"]["WindowSize"] = width.Text + "x" + height.Text;
-                    break;
-                default:
-                    settings["Graphics"]["WindowSize"] = "Auto";
-                    break;
-            }
+                "Custom" => width.Text + "x" + height.Text,
+                _ => "Auto",
+            };
 
             // Reading fullscreen settings
             selection = fullscreenMode.Controls.OfType<RadioButton>()
                 .FirstOrDefault(n => n.Checked).Text;
-            switch (selection)
+            settings["Graphics"]["Fullscreen"] = selection switch
             {
-                case "Borderless Fullscreen":
-                    settings["Graphics"]["Fullscreen"] = "1";
-                    break;
-                case "Fullscreen":
-                    settings["Graphics"]["Fullscreen"] = "2";
-                    break;
-                default:
-                    settings["Graphics"]["Fullscreen"] = "0";
-                    break;
-            }
-
+                "Borderless Fullscreen" => "1",
+                "Fullscreen" => "2",
+                _ => "0",
+            };
             settings["Graphics"]["NewRenderer"] = Convert.ToInt32(checkPPU.Checked).ToString();
             settings["Graphics"]["NoSpriteLimits"] = Convert.ToInt32(checkSpriteLimit.Checked).ToString();
             settings["Graphics"]["LinearFiltering"] = Convert.ToInt32(checkLinearFiltering.Checked).ToString();
@@ -651,15 +622,11 @@ namespace Super_Metroid_Launcher
             // Reading audio channels setting
             selection = groupBoxAudioChannels.Controls.OfType<RadioButton>()
                 .FirstOrDefault(n => n.Checked).Text;
-            switch (selection)
+            settings["Sound"]["AudioChannels"] = selection switch
             {
-                case "Mono":
-                    settings["Sound"]["AudioChannels"] = "1";
-                    break;
-                default:
-                    settings["Sound"]["AudioChannels"] = "2";
-                    break;
-            }
+                "Mono" => "1",
+                _ => "2",
+            };
 
             /* Reading MSU version setting
             if (checkBoxEnableMSU.Checked)
@@ -697,7 +664,7 @@ namespace Super_Metroid_Launcher
             filer.WriteFile(iniFile, settings, Encoding.GetEncoding(1252));
         }
 
-        private string findMSUPrefix(IEnumerable<string> files)
+        private static string FindMSUPrefix(IEnumerable<string> files)
         {
             var fileCount = files.Count<string>();
             var length = files.Min(n => n.Length);
@@ -710,7 +677,7 @@ namespace Super_Metroid_Launcher
                 for (int j = i + 1; j <= length; j++)
                 {
                     int k;
-                    String substring = reference.Substring(i, j - i);
+                    String substring = reference[i..j];
 
                     for (k = 1; k < fileCount; k++)
                     {
@@ -724,11 +691,12 @@ namespace Super_Metroid_Launcher
             return result;
         }
 
-        private void buttonOpenSprites_Click(object sender, EventArgs e)
+        private void ButtonOpenSprites_Click(object sender, EventArgs e)
         {
-            var result = new OpenFileDialog();
-
-            result.Filter = "ZSPR sprites (*.zspr)|*.zspr";
+            var result = new OpenFileDialog
+            {
+                Filter = "ZSPR sprites (*.zspr)|*.zspr"
+            };
             result.ShowDialog();
 
             if (result.FileName.Equals("")) return;
@@ -742,11 +710,12 @@ namespace Super_Metroid_Launcher
             textBoxCustomLink.Text = result.FileName;
         }
 
-        private void buttonOpenShader_Click(object sender, EventArgs e)
+        private void ButtonOpenShader_Click(object sender, EventArgs e)
         {
-            var result = new OpenFileDialog();
-
-            result.Filter = "Shaders (*.glsl, *glslp)|*.glsl;*.glslp";
+            var result = new OpenFileDialog
+            {
+                Filter = "Shaders (*.glsl, *glslp)|*.glsl;*.glslp"
+            };
             result.ShowDialog();
 
             if (result.FileName.Equals("")) return;
@@ -760,7 +729,7 @@ namespace Super_Metroid_Launcher
             textBoxGLSLShader.Text = result.FileName;
         }
 
-        private void buttonMSUDirectory_Click(object sender, EventArgs e)
+        private void ButtonMSUDirectory_Click(object sender, EventArgs e)
         {
             var result = new FolderBrowserDialog();
 
@@ -794,7 +763,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void linkLabelCustomSprites_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabelCustomSprites_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             /*
             this.linkLabelCustomSprites.LinkVisited = true;
@@ -803,25 +772,23 @@ namespace Super_Metroid_Launcher
             */
         }
 
-        private void linkLabelGLSLShaders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabelGLSLShaders_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             this.linkLabelCustomSprites.LinkVisited = true;
 
             Process.Start(new ProcessStartInfo("https://github.com/snesrev/glsl-shaders") { UseShellExecute = true });
         }
 
-        private void buttonKeymapping_Click(object sender, EventArgs e)
+        private void ButtonKeymapping_Click(object sender, EventArgs e)
         {
-            using (keymapper keymapper = new keymapper())
+            using keymapper keymapper = new();
+            if (!keymapper.IsDisposed && keymapper.ShowDialog() == DialogResult.OK)
             {
-                if (!keymapper.IsDisposed && keymapper.ShowDialog() == DialogResult.OK)
-                {
-                    keymapper.Dispose();
-                }
+                keymapper.Dispose();
             }
         }
 
-        private void linkLabelMinorFixes_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabelMinorFixes_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             /*
             this.linkLabelMinorFixes.LinkVisited = true;
@@ -830,7 +797,7 @@ namespace Super_Metroid_Launcher
             */
         }
 
-        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             /*
             this.linkLabelMajorFixes.LinkVisited = true;

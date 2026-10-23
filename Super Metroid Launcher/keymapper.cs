@@ -13,9 +13,9 @@ namespace Super_Metroid_Launcher
     public partial class keymapper : Form
     {
         bool changed = false;
-        IniData settings = new IniData();
-        string iniFile = Path.Combine(Program.repoDir, "sm.ini");
-        MyController controller = new MyController();
+        IniData settings = new();
+        readonly string iniFile = Path.Combine(Program.repoDir, "sm.ini");
+        readonly MyController controller = new();
 
         public keymapper()
         {
@@ -70,7 +70,6 @@ namespace Super_Metroid_Launcher
         {
             TextBox textBox = sender as TextBox;
             var original = textBox.Text;
-            string result;
 
             var leftTrigger = false;
             var rightTrigger = false;
@@ -87,16 +86,14 @@ namespace Super_Metroid_Launcher
                 SDL.SDL_WindowFlags.SDL_WINDOW_BORDERLESS |
                 SDL.SDL_WindowFlags.SDL_WINDOW_ALWAYS_ON_TOP);
 
-            SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
+            _ = SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
 
             var stop = DateTime.Now.AddSeconds(5);
 
             while (true)
             {
-                SDL.SDL_Event ev;
-
                 // Wait for an event to occur
-                SDL.SDL_PollEvent(out ev);
+                _ = SDL.SDL_PollEvent(out SDL.SDL_Event ev);
 
                 switch (ev.type)
                 {
@@ -150,7 +147,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private string? FormatKeyInput(SDL.SDL_Keycode key)
+        private static string? FormatKeyInput(SDL.SDL_Keycode key)
         {
             var result = SDL.SDL_GetKeyName(key);
 
@@ -177,7 +174,7 @@ namespace Super_Metroid_Launcher
                 return null;
             }
 
-            if (result.Contains("F") && result.Length == 2 | result.Length == 3)
+            if (result.Contains('F') && result.Length == 2 | result.Length == 3)
             {
                 MessageBox.Show("The function keys are utilized by sm.exe's replay/savestate functionality and thus cannot be used for other inputs.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
@@ -218,7 +215,7 @@ namespace Super_Metroid_Launcher
             textBox.Text = "";
             this.Refresh();
 
-            if (selection == "Controller") result = controller.GetButtonName();
+            if (selection == "Controller") result = MyController.GetButtonName();
             else result = GetKeyInput();
 
             if (result is null) textBox.Text = original;
@@ -229,7 +226,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private string? GetKeyInput()
+        private static string? GetKeyInput()
         {
             SDL.SDL_PumpEvents();
             SDL.SDL_FlushEvent(SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN);
@@ -239,16 +236,14 @@ namespace Super_Metroid_Launcher
                 SDL.SDL_WindowFlags.SDL_WINDOW_BORDERLESS |
                 SDL.SDL_WindowFlags.SDL_WINDOW_ALWAYS_ON_TOP);
 
-            SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
+            _ = SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
 
             var stop = DateTime.Now.AddSeconds(5);
 
             while (true)
             {
-                SDL.SDL_Event ek;
-
                 // Wait for an event to occur
-                SDL.SDL_PollEvent(out ek);
+                _ = SDL.SDL_PollEvent(out SDL.SDL_Event ek);
 
                 // Check if the event was a joystick button press
                 if (ek.type == SDL.SDL_EventType.SDL_KEYDOWN)
@@ -322,19 +317,19 @@ namespace Super_Metroid_Launcher
 
                 if (!File.Exists(iniBackup)) settingsForm.DownloadFreshINI();
 
-                using (var modifiedFile = File.AppendText(iniFile))
+                using var modifiedFile = File.AppendText(iniFile);
+                foreach (var line in File.ReadLines(iniBackup))
                 {
-                    foreach (var line in File.ReadLines(iniBackup))
-                    {
-                        modifiedFile.WriteLine(line);
-                    }
+                    modifiedFile.WriteLine(line);
                 }
             }
             var iniText = File.ReadAllText(iniFile);
 
             // INI parsing
-            var config = new IniParserConfiguration();
-            config.CommentString = "#";
+            var config = new IniParserConfiguration
+            {
+                CommentString = "#"
+            };
 
             var parser = new IniDataParser(config);
 
@@ -490,14 +485,14 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
             SaveINI();
 
             this.Close();
         }
 
-        private void buttonReset_Click(object sender, EventArgs e)
+        private void ButtonReset_Click(object sender, EventArgs e)
         {
             RestoreFromBackupINI();
 
@@ -515,8 +510,10 @@ namespace Super_Metroid_Launcher
             var iniText = File.ReadAllText(iniBackup);
 
             // INI parsing
-            var config = new IniParserConfiguration();
-            config.CommentString = "#";
+            var config = new IniParserConfiguration
+            {
+                CommentString = "#"
+            };
 
             var parser = new IniDataParser(config);
 
@@ -533,7 +530,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             var answer = MessageBox.Show("The changes that you have made will not be saved.\n\nDo you wish to continue?", "Confirmation", MessageBoxButtons.YesNo);
 
@@ -542,7 +539,7 @@ namespace Super_Metroid_Launcher
             this.Close();
         }
 
-        private void buttonAssignAll_Click(object sender, EventArgs e)
+        private void ButtonAssignAll_Click(object sender, EventArgs e)
         {
             EnableWindow(false);
 

@@ -1,18 +1,16 @@
-﻿using System;
-using SDL2;
-using Timer = System.Timers.Timer;
+﻿using SDL2;
 
 namespace Super_Metroid_Launcher
 {
     public class MyController
     {
-        private IntPtr controller;
+        private readonly IntPtr controller;
         public bool connected = false;
 
         public MyController()
         {
             // Initialize SDL
-            SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER);
+            _ = SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER);
 
             // Check if any joysticks are connected
             if (SDL.SDL_NumJoysticks() > 0)
@@ -23,7 +21,7 @@ namespace Super_Metroid_Launcher
             }
         }
 
-        public string? GetButtonName()
+        public static string? GetButtonName()
         {
             SDL.SDL_PumpEvents();
             SDL.SDL_FlushEvents(SDL.SDL_EventType.SDL_FIRSTEVENT, SDL.SDL_EventType.SDL_LASTEVENT);
@@ -33,7 +31,7 @@ namespace Super_Metroid_Launcher
                 SDL.SDL_WindowFlags.SDL_WINDOW_BORDERLESS |
                 SDL.SDL_WindowFlags.SDL_WINDOW_ALWAYS_ON_TOP);
 
-            SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
+            _ = SDL.SDL_ShowCursor(SDL.SDL_DISABLE);
 
             var leftTrigger = false;
             var rightTrigger = false;
@@ -41,10 +39,8 @@ namespace Super_Metroid_Launcher
 
             while (true)
             {
-                SDL.SDL_Event e;
-
                 // Wait for an event to occur
-                SDL.SDL_PollEvent(out e);
+                _ = SDL.SDL_PollEvent(out SDL.SDL_Event e);
 
                 // Check for ESC key
                 if (e.type == SDL.SDL_EventType.SDL_KEYDOWN)
@@ -97,41 +93,25 @@ namespace Super_Metroid_Launcher
 
         internal static string? ConvertButtonID(byte button)
         {
-            switch (button)
+            return button switch
             {
-                case 0:
-                    return "A";
-                case 1:
-                    return "B";
-                case 2:
-                    return "X";
-                case 3:
-                    return "Y";
-                case 4:
-                    return "Back";
-                case 5:
-                    return "Guide";
-                case 6:
-                    return "Start";
-                case 7:
-                    return "L3";
-                case 8:
-                    return "R3";
-                case 9:
-                    return "Lb";
-                case 10:
-                    return "Rb";
-                case 11:
-                    return "DPadUp";
-                case 12:
-                    return "DPadDown";
-                case 13:
-                    return "DPadLeft";
-                case 14:
-                    return "DPadRight";
-                default:
-                    return null;
-            }
+                0 => "A",
+                1 => "B",
+                2 => "X",
+                3 => "Y",
+                4 => "Back",
+                5 => "Guide",
+                6 => "Start",
+                7 => "L3",
+                8 => "R3",
+                9 => "Lb",
+                10 => "Rb",
+                11 => "DPadUp",
+                12 => "DPadDown",
+                13 => "DPadLeft",
+                14 => "DPadRight",
+                _ => null,
+            };
         }
 
         public void Close()
